@@ -7,104 +7,39 @@ export type Json =
   | Json[]
 
 export type Database = {
-  public: {
+  storymake: {
     Tables: {
-      campains: {
+      templates: {
         Row: {
+          categories: Json
           created_at: string
+          description: string
           id: string
           name: string
-          status: string | null
+          user_id: string
         }
         Insert: {
+          categories: Json
           created_at?: string
+          description: string
           id?: string
           name: string
-          status?: string | null
+          user_id: string
         }
         Update: {
+          categories?: Json
           created_at?: string
+          description?: string
           id?: string
           name?: string
-          status?: string | null
-        }
-        Relationships: []
-      }
-      players: {
-        Row: {
-          campain_id: string
-          created_at: string
-          exp: number | null
-          id: string
-          level: number | null
-          name: string
-          playCount: number | null
-          playToken: number | null
-        }
-        Insert: {
-          campain_id: string
-          created_at?: string
-          exp?: number | null
-          id?: string
-          level?: number | null
-          name: string
-          playCount?: number | null
-          playToken?: number | null
-        }
-        Update: {
-          campain_id?: string
-          created_at?: string
-          exp?: number | null
-          id?: string
-          level?: number | null
-          name?: string
-          playCount?: number | null
-          playToken?: number | null
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "players_campain_id_fkey"
-            columns: ["campain_id"]
+            foreignKeyName: "storymake_templates_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "campains"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      sessions: {
-        Row: {
-          campain_id: string
-          created_at: string
-          exp: number | null
-          gm: string | null
-          id: string
-          name: string
-          number: number
-        }
-        Insert: {
-          campain_id: string
-          created_at?: string
-          exp?: number | null
-          gm?: string | null
-          id?: string
-          name: string
-          number: number
-        }
-        Update: {
-          campain_id?: string
-          created_at?: string
-          exp?: number | null
-          gm?: string | null
-          id?: string
-          name?: string
-          number?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "sessions_campain_id_fkey"
-            columns: ["campain_id"]
-            isOneToOne: false
-            referencedRelation: "campains"
+            referencedRelation: "users"
             referencedColumns: ["id"]
           }
         ]
