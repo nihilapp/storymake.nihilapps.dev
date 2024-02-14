@@ -1,0 +1,66 @@
+{
+  "name": "storymake.nihilapps.dev",
+  "version": "1.0.0",
+  "description": "Nextjs 편하게 쓰려고 만든 템플릿. 타입스크립트 기본 지원.",
+  "main": "index.js",
+  "proxy": "http://localhost:4000",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nihilapp/storymake.nihilapps.dev.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nihilapp/storymake.nihilapps.dev/issues"
+  },
+  "homepage": "https://github.com/nihilapp/storymake.nihilapps.dev#readme",
+  "scripts": {
+    "remove": "rm -rf node_modules/.cache && rm -rf build/",
+    "serve": "yarn run remove && next dev",
+    "start": "yarn run build && next start",
+    "build": "yarn run remove && next build",
+    "clean": "yarn cache clean"
+  },
+  "keywords": [],
+  "author": "NIHILncunia",
+  "license": "MIT",
+  "dependencies": {
+    "@iconify/react": "^4.1.1",
+    "@prisma/extension-accelerate": "^0.6.3",
+    "@supabase/ssr": "^0.1.0",
+    "@supabase/supabase-js": "^2.39.6",
+    "axios": "^1.6.7",
+    "dayjs": "^1.11.10",
+    "dotenv": "^16.4.2",
+    "next": "^14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.50.1",
+    "react-toastify": "^10.0.4",
+    "tailwind-merge": "^2.2.1",
+    "uuid": "^9.0.1",
+    "zustand": "^4.5.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.9",
+    "@svgr/webpack": "^8.1.0",
+    "@tailwindcss/typography": "^0.5.10",
+    "@types/node": "^20.11.17",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "@types/uuid": "^9.0.8",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "autoprefixer": "^10.4.17",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-next": "^14.1.0",
+    "eslint-plugin-html": "^8.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "postcss": "^8.4.35",
+    "supabase": "^1.142.2",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3"
+  }
+}
