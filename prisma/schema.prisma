@@ -1,0 +1,212 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int         @id @default(autoincrement())
+  uid          String      @unique @default(uuid())
+  userEmail    String      @unique
+  userName     String      @unique
+  password     String
+  userRole     UserRole    @default(USER)
+  accessToken  String?
+  refreshToken String?
+  created      DateTime    @default(now())
+  updated      DateTime    @updatedAt
+  Project      Project[]
+  Character    Character[]
+
+  @@index([userEmail, userName, uid])
+  @@map("users")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model Project {
+  id          Int           @id @default(autoincrement())
+  User        User          @relation(fields: [userId], references: [id])
+  userId      Int
+  title       String
+  description String?
+  created     DateTime      @default(now())
+  updated     DateTime      @updatedAt
+  status      ProjectStatus @default(SHOW)
+  Character   Character[]
+  Origin      Origin[]
+  Feat        Feat[]
+  Race        Race[]
+  Class       Class[]
+
+  @@map("projects")
+}
+
+enum ProjectStatus {
+  SHOW
+  HIDE
+}
+
+model Character {
+  id         Int               @id @default(autoincrement())
+  User       User              @relation(fields: [userId], references: [id])
+  userId     Int
+  Project    Project           @relation(fields: [projectId], references: [id])
+  projectId  Int
+  firstName  String
+  middleName String?
+  lastName   String?
+  alias      String?
+  level      Int               @default(0)
+  backStory  String?
+  portrait   String?
+  statSTR    Int               @default(10)
+  statDEX    Int               @default(10)
+  statCON    Int               @default(10)
+  statINT    Int               @default(10)
+  statWIS    Int               @default(10)
+  statCHA    Int               @default(10)
+  statLUK    Int               @default(1)
+  gender     CharacterGender
+  created    DateTime          @default(now())
+  updated    DateTime          @updatedAt
+  status     CharacterStatus   @default(SHOW)
+  feats      CharacterFeat[]
+  origins    CharacterOrigin[]
+  race       CharacterRace[]
+  classes    CharacterClass[]
+
+  @@map("characters")
+}
+
+enum CharacterStatus {
+  SHOW
+  HIDE
+}
+
+enum CharacterGender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+model Origin {
+  id                Int               @id @default(autoincrement())
+  Project           Project           @relation(fields: [projectId], references: [id])
+  projectId         Int
+  originName        String
+  originDescription String?
+  created           DateTime          @default(now())
+  updated           DateTime          @updatedAt
+  characters        CharacterOrigin[]
+
+  @@map("char_origins")
+}
+
+model CharacterOrigin {
+  id          Int       @id @default(autoincrement())
+  Origin      Origin    @relation(fields: [originId], references: [id])
+  originId    Int
+  Character   Character @relation(fields: [characterId], references: [id])
+  characterId Int
+  description String?
+}
+
+model Feat {
+  id              Int             @id @default(autoincrement())
+  Project         Project         @relation(fields: [projectId], references: [id])
+  projectId       Int
+  featName        String
+  featDescription String?
+  featType        FeatType
+  isPassive       Boolean
+  created         DateTime        @default(now())
+  updated         DateTime        @updatedAt
+  characters      CharacterFeat[]
+
+  @@map("char_feats")
+}
+
+enum FeatType {
+  LIFE
+  BATTLE
+}
+
+model CharacterFeat {
+  id          Int       @id @default(autoincrement())
+  Feat        Feat      @relation(fields: [featId], references: [id])
+  featId      Int
+  Character   Character @relation(fields: [characterId], references: [id])
+  characterId Int
+  description String?
+}
+
+model Race {
+  id              Int             @id @default(autoincrement())
+  Project         Project         @relation(fields: [projectId], references: [id])
+  projectId       Int
+  raceName        String
+  raceDescription String?
+  raceType        RaceType
+  created         DateTime        @default(now())
+  updated         DateTime        @updatedAt
+  character       CharacterRace[]
+}
+
+model CharacterRace {
+  id          Int       @id @default(autoincrement())
+  Race        Race      @relation(fields: [raceId], references: [id])
+  raceId      Int
+  Character   Character @relation(fields: [characterId], references: [id])
+  characterId Int       @unique
+  description String?
+}
+
+enum RaceType {
+  HUMANOID
+  UNDEAD
+  BEAST
+  ELEMENTAL
+  OUTSIDER
+  PLANT
+  CONSTRUCT
+  CELESTIAL
+  DIABLOS
+  GIANT
+  AMORPHOUS
+}
+
+model Class {
+  id               Int              @id @default(autoincrement())
+  Project          Project          @relation(fields: [projectId], references: [id])
+  projectId        Int
+  classNamea       String
+  classDescription String?
+  isUpperClass     Boolean
+  created          DateTime         @default(now())
+  updated          DateTime         @updatedAt
+  characters       CharacterClass[]
+
+  @@map("classes")
+}
+
+model CharacterClass {
+  id          Int       @id @default(autoincrement())
+  Class       Class     @relation(fields: [classId], references: [id])
+  classId     Int
+  Character   Character @relation(fields: [characterId], references: [id])
+  characterId Int       @unique
+  description String?
+}
