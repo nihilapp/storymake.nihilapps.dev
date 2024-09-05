@@ -50,6 +50,7 @@ export interface QueryKeys<T> {
   getAll: string[];
   getById: (id: T) => [string, T];
   getByName?: (name: string) => [string, string];
+  getByEmail?: (email: string) => [string, string];
 }
 
 export interface CharacterNames {

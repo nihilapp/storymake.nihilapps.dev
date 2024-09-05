@@ -1,1 +1,1 @@
-export { ExampleQuery } from './query/example.query';
+export { UsersQuery } from './query/users.query';

@@ -1,4 +1,8 @@
 export { useInput } from './useInput';
 
-export { useGetExamples } from './query/examples/useGetExamples';
-export { useCreateExample } from './query/examples/useCreateExample';
+export { useGetUsers } from './query/users/useGetUsers';
+export { useGetUserById } from './query/users/useGetUserById';
+export { useCreateUser } from './query/users/useCreateUser';
+
+export { useSignIn } from './query/auth/useSignIn';
+export { useSignOut } from './query/auth/useSignOut';

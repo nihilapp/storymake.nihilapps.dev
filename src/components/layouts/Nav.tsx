@@ -21,9 +21,9 @@ export function Nav({ styles, }: Props) {
       <nav className={style.default}>
         <div>
           <Link href='/'>홈</Link>
+          <Link href='/admin/users'>사용자 관리</Link>
           <Link href='/auth/signin'>로그인</Link>
           <Link href='/auth/signup'>회원가입</Link>
-          <Link href='/test'>테스트</Link>
         </div>
       </nav>
     </>

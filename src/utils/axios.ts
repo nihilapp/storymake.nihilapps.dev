@@ -89,4 +89,26 @@ export class Api {
       config
     );
   }
+
+  static async getQuery<D>(url: string) {
+    return this.get<D>(url);
+  }
+
+  static async postQuery<D, P>(
+    url: string,
+    postData: P
+  ) {
+    return this.post<D, P>(url, postData);
+  }
+
+  static async patchQuery<D, P>(
+    url: string,
+    patchData: P
+  ) {
+    return this.patch<D, P>(url, patchData);
+  }
+
+  static async deleteQuery<D>(url: string) {
+    return this.delete<D>(url);
+  }
 }

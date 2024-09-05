@@ -20,7 +20,51 @@ export class DB {
     return prisma;
   }
 
-  static examples() {
-    return this.client().example;
+  static users() {
+    return this.client().user;
+  }
+
+  static characters() {
+    return this.client().character;
+  }
+
+  static projects() {
+    return this.client().project;
+  }
+
+  static origins() {
+    return this.client().origin;
+  }
+
+  static charOrigins() {
+    return this.client().characterOrigin;
+  }
+
+  static feats() {
+    return this.client().feat;
+  }
+
+  static charFeats() {
+    return this.client().characterFeat;
+  }
+
+  static races() {
+    return this.client().race;
+  }
+
+  static charRaces() {
+    return this.client().characterRace;
+  }
+
+  static classes() {
+    return this.client().class;
+  }
+
+  static charClasses() {
+    return this.client().characterClass;
+  }
+
+  static logs() {
+    return this.client().log;
   }
 }

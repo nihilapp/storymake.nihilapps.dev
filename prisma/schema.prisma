@@ -122,6 +122,9 @@ model CharacterOrigin {
   Character   Character @relation(fields: [characterId], references: [id])
   characterId Int
   description String?
+
+  @@index([originId, characterId])
+  @@map("mtom_char_origin")
 }
 
 model Feat {
@@ -151,6 +154,9 @@ model CharacterFeat {
   Character   Character @relation(fields: [characterId], references: [id])
   characterId Int
   description String?
+
+  @@index([featId, characterId])
+  @@map("mtom_char_feat")
 }
 
 model Race {
@@ -172,6 +178,9 @@ model CharacterRace {
   Character   Character @relation(fields: [characterId], references: [id])
   characterId Int       @unique
   description String?
+
+  @@index([raceId, characterId])
+  @@map("mtom_char_race")
 }
 
 enum RaceType {
@@ -209,4 +218,18 @@ model CharacterClass {
   Character   Character @relation(fields: [characterId], references: [id])
   characterId Int       @unique
   description String?
+
+  @@index([classId, characterId])
+  @@map("mtom_char_class")
+}
+
+model Log {
+  id      Int      @id @default(autoincrement())
+  user    String
+  uri     String
+  yn      Boolean
+  message String
+  created DateTime @default(now())
+
+  @@map("logs")
 }
