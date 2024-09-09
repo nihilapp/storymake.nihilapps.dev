@@ -63,8 +63,4 @@ export class DB {
   static charClasses() {
     return this.client().characterClass;
   }
-
-  static logs() {
-    return this.client().log;
-  }
 }

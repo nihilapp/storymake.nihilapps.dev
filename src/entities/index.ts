@@ -26,9 +26,7 @@ export {
 export {
   type SignInDto,
   type TokenPayload,
-  type AuthCheck
+  type AuthCheck,
+  type SignOutDto,
+  type TokenStatus
 } from './auth/auth.types';
-
-export {
-  type CreateLogDto
-} from './logs/logs.types';

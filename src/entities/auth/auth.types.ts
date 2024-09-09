@@ -1,4 +1,4 @@
-import { UserRole } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 
 export interface SignInDto {
   userEmail: string;
@@ -12,8 +12,15 @@ export interface TokenPayload {
   userRole: UserRole;
 }
 
+export interface SignOutDto {
+  user: User;
+}
+
 export interface AuthCheck {
-  uid: string;
-  accessToken: string;
-  refreshToken: string;
+  user: User;
+}
+
+export interface TokenStatus {
+  accessTokenStatus: boolean;
+  refreshTokenStatus: boolean;
 }

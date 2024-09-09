@@ -222,14 +222,3 @@ model CharacterClass {
   @@index([classId, characterId])
   @@map("mtom_char_class")
 }
-
-model Log {
-  id      Int      @id @default(autoincrement())
-  user    String
-  uri     String
-  yn      Boolean
-  message String
-  created DateTime @default(now())
-
-  @@map("logs")
-}

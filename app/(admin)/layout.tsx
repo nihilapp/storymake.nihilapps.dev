@@ -1,16 +1,17 @@
 import React from 'react';
-import { DefaultPage } from '@/src/widgets';
-import { SignInButton } from '@/src/components';
+import { AdminPage, DefaultPage } from '@/src/widgets';
+import { AdminSignInButton } from '@/src/components';
 
 interface Props {
   children: React.ReactNode;
 }
 
-export default function CommonLayout({ children, }: Props) {
+export default function AdminLayout({ children, }: Props) {
   return (
     <>
-      <SignInButton />
-      {children}
+      <AdminPage>
+        {children}
+      </AdminPage>
     </>
   );
 }

@@ -6,3 +6,4 @@ export { useCreateUser } from './query/users/useCreateUser';
 
 export { useSignIn } from './query/auth/useSignIn';
 export { useSignOut } from './query/auth/useSignOut';
+export { useAdminSignIn } from './query/auth/useAdminSignIn';

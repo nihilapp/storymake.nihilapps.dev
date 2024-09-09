@@ -1,6 +1,6 @@
 import React from 'react';
 import { setMeta } from '@/src/utils';
-import { CreateUserBlock } from '@/src/components';
+import { AdminBlock, CreateUserBlock } from '@/src/components';
 
 interface Props {
   //
@@ -13,8 +13,6 @@ export const metadata = setMeta({
 
 export default function AdminUserPage() {
   return (
-    <>
-      <CreateUserBlock />
-    </>
+    <AdminBlock />
   );
 }

@@ -1,10 +1,10 @@
 export type ApiResponse<T> = {
-  data: T;
+  resData: T;
   message: string;
 }
 
 export type ApiError = {
-  data: null;
+  resData: null;
   message: string;
 }
 

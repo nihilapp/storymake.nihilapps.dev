@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server.js';
+import { NextRequest } from 'next/server';
 import { nihilTool } from '@nihilapp/tools';
 import { User } from '@prisma/client';
 import { SignInDto } from '@/src/entities';
@@ -17,18 +17,27 @@ export async function POST(req: NextRequest) {
   if (!findUser) {
     return Response.json(createResponse<null>({
       resData: null,
-      message: '존재하지 않는 계정입니다.',
+      message: '존재하지 않는 사용자입니다.',
     }), {
       status: 400,
     });
   }
 
-  const passwordCheck = await nihilTool.bcrypt.dataCompare(
+  if (findUser.userRole !== 'ADMIN') {
+    return Response.json(createResponse<null>({
+      resData: null,
+      message: '관리자 계정이 아닙니다.',
+    }), {
+      status: 401,
+    });
+  }
+
+  const passwordCompare = nihilTool.bcrypt.dataCompare(
     findUser.password,
     signInDto.password
   );
 
-  if (!passwordCheck) {
+  if (!passwordCompare) {
     return Response.json(createResponse<null>({
       resData: null,
       message: '비밀번호가 일치하지 않습니다.',
@@ -40,7 +49,7 @@ export async function POST(req: NextRequest) {
   const refreshToken = await AuthTool.genToken(findUser, 'refreshToken');
   const accessToken = await AuthTool.genToken(findUser, 'accessToken');
 
-  const signInUser = await DB.users().update({
+  const updatedUser = await DB.users().update({
     where: {
       id: findUser.id,
     },
@@ -50,10 +59,8 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  signInUser.password = null;
-
   return Response.json(createResponse<User>({
-    resData: signInUser,
+    resData: updatedUser,
     message: 'ok',
   }), {
     status: 200,

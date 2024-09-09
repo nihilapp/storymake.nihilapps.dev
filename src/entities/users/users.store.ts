@@ -17,7 +17,6 @@ export const usersStore = create(
     }),
     {
       name: 'storymake/users-state',
-      skipHydration: true,
       storage: createJSONStorage(() => localStorage),
     }
   )

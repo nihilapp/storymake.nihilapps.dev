@@ -1,39 +1,35 @@
 import { NextRequest } from 'next/server.js';
-import { DB } from '@/src/utils';
-import { tokenCheck } from '@/src/utils/auth';
-import { ApiResponse, AuthCheck } from '@/src/entities';
+import { AuthTool, DB } from '@/src/utils';
+import { SignOutDto } from '@/src/entities';
+import { createResponse } from '@/src/utils/auth';
 
 export async function POST(req: NextRequest) {
-  const signOutDto: AuthCheck = await req.json();
+  const signOutDto: SignOutDto = await req.json();
 
-  const isTokenCheck = tokenCheck(signOutDto);
+  const check = await AuthTool.expChecker(signOutDto.user);
 
-  if (isTokenCheck) {
-    await DB.users().update({
-      where: {
-        uid: signOutDto.uid,
-      },
-      data: {
-        accessToken: null,
-      },
-    });
-
-    const response: ApiResponse<null> = {
-      data: null,
-      message: 'ok',
-    };
-
-    return Response.json(response, {
-      status: 200,
-    });
-  } else {
-    const response: ApiResponse<null> = {
-      data: null,
-      message: '인증에 실패했습니다.',
-    };
-
-    return Response.json(response, {
+  if (!check.resData) {
+    return Response.json(createResponse<null>({
+      resData: null,
+      message: '인증정보가 일치하지 않거나 이미 로그아웃 상태입니다.',
+    }), {
       status: 401,
     });
   }
+
+  await DB.users().update({
+    where: {
+      uid: signOutDto.user.uid,
+    },
+    data: {
+      accessToken: null,
+    },
+  });
+
+  return Response.json(createResponse<null>({
+    resData: null,
+    message: '로그아웃되었습니다.',
+  }), {
+    status: 200,
+  });
 }

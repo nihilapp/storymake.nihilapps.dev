@@ -11,5 +11,7 @@ export { Logo } from './layouts/Logo';
 
 export { HomeContent } from './home/HomeContent';
 
-export { SignInButton } from './admin/SignInButton';
+export { AdminBlock } from './admin/AdminBlock';
+export { AdminSignInButton } from './admin/AdminSignInButton';
+export { AdminSignOutButton } from './admin/AdminSignOutButton';
 export { CreateUserBlock } from './admin.users/CreateUserBlock';

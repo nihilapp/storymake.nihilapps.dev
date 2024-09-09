@@ -1,7 +1,8 @@
 import { User } from '@prisma/client';
 import { NextRequest } from 'next/server.js';
-import { DB } from '@/src/utils';
-import { ApiResponse, UpdateUserDto } from '@/src/entities';
+import { AuthTool, DB } from '@/src/utils';
+import { UpdateUserDto } from '@/src/entities';
+import { createResponse } from '@/src/utils/auth';
 
 interface Params {
   params: {
@@ -16,18 +17,36 @@ export async function GET(_: NextRequest, { params, }: Params) {
     },
   });
 
-  const response: ApiResponse<User> = {
-    data: user,
+  return Response.json(createResponse<User>({
+    resData: user,
     message: 'ok',
-  };
-
-  return Response.json(response, {
+  }), {
     status: 200,
   });
 }
 
 export async function PATCH(req: NextRequest, { params, }: Params) {
-  const updateUserDto: UpdateUserDto = await req.json();
+  const { user, ...updateUserDto }: UpdateUserDto = await req.json();
+
+  const check = await AuthTool.expChecker(user);
+
+  if (!check.resData) {
+    return Response.json(createResponse<null>({
+      resData: null,
+      message: '로그인해야 합니다.',
+    }), {
+      status: 401,
+    });
+  }
+
+  if ((check.resData.id !== params.id) && (check.resData.userRole !== 'ADMIN')) {
+    return Response.json(createResponse<null>({
+      resData: null,
+      message: '회원 정보가 일치하지 않습니다.',
+    }), {
+      status: 401,
+    });
+  }
 
   const updateUser = await DB.users().update({
     where: {
@@ -36,12 +55,10 @@ export async function PATCH(req: NextRequest, { params, }: Params) {
     data: updateUserDto,
   });
 
-  const response: ApiResponse<User> = {
-    data: updateUser,
+  return Response.json(createResponse<User>({
+    resData: updateUser,
     message: 'ok',
-  };
-
-  return Response.json(response, {
+  }), {
     status: 200,
   });
 }
@@ -53,12 +70,10 @@ export async function DELETE(_: NextRequest, { params, }: Params) {
     },
   });
 
-  const response: ApiResponse<User> = {
-    data: deleteUser,
+  return Response.json(createResponse<User>({
+    resData: deleteUser,
     message: 'ok',
-  };
-
-  return Response.json(response, {
+  }), {
     status: 200,
   });
 }

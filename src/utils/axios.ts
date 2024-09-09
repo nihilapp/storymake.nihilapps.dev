@@ -91,24 +91,32 @@ export class Api {
   }
 
   static async getQuery<D>(url: string) {
-    return this.get<D>(url);
+    const { data, } = await this.get<D>(url);
+
+    return data;
   }
 
   static async postQuery<D, P>(
     url: string,
     postData: P
   ) {
-    return this.post<D, P>(url, postData);
+    const { data, } = await this.post<D, P>(url, postData);
+
+    return data;
   }
 
   static async patchQuery<D, P>(
     url: string,
     patchData: P
   ) {
-    return this.patch<D, P>(url, patchData);
+    const { data, } = await this.patch<D, P>(url, patchData);
+
+    return data;
   }
 
   static async deleteQuery<D>(url: string) {
-    return this.delete<D>(url);
+    const { data, } = await this.delete<D>(url);
+
+    return data;
   }
 }

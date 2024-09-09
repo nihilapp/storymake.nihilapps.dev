@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
-import { AuthQuery } from '@/src/features/query/auth.query';
-import { AuthCheck } from '@/src/entities';
+import { AuthQuery } from '@/src/features';
+import { SignOutDto } from '@/src/entities';
 
 export function useSignOut() {
   const query = useMutation({
-    mutationFn: (signOutDto: AuthCheck) => (
+    mutationFn: (signOutDto: SignOutDto) => (
       AuthQuery.signOut(signOutDto)
     ),
   });

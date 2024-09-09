@@ -2,23 +2,23 @@
 
 import React, { useCallback } from 'react';
 import { ClassNameValue, twJoin } from 'tailwind-merge';
-import { useSignIn } from '@/src/hooks';
+import { useAdminSignIn } from '@/src/hooks';
 import { usersStore } from '@/src/entities';
 
 interface Props {
   className?: ClassNameValue;
 }
 
-export function SignInButton({ className, }: Props) {
+export function AdminSignInButton({ className, }: Props) {
   const { me, setMe, } = usersStore();
-  const signIn = useSignIn();
+  const signIn = useAdminSignIn();
   console.log('me >> ', me);
 
   const onClickSignIn = useCallback(
     () => {
       signIn.mutate({
-        userEmail: 'nihil_ncunia@naver.com',
-        password: 'iu0516jej0818',
+        userEmail: process.env.NEXT_PUBLIC_ADMIN_EMAIL,
+        password: process.env.NEXT_PUBLIC_ADMIN_PASSWORD,
       }, {
         onSuccess(res) {
           setMe(res.data.data);

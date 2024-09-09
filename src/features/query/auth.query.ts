@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { AuthCheck, SignInDto } from '@/src/entities';
+import { SignInDto, SignOutDto } from '@/src/entities';
 import { Api } from '@/src/utils';
 
 export class AuthQuery {
@@ -10,10 +10,17 @@ export class AuthQuery {
     );
   }
 
-  static async signOut(signOutDto: AuthCheck) {
-    return Api.postQuery<null, AuthCheck>(
+  static async signOut(signOutDto: SignOutDto) {
+    return Api.postQuery<null, SignOutDto>(
       '/auth/signout',
       signOutDto
+    );
+  }
+
+  static async adminSignIn(signInDto: SignInDto) {
+    return Api.postQuery<User, SignInDto>(
+      '/admin/auth/signin',
+      signInDto
     );
   }
 }
