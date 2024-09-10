@@ -24,7 +24,10 @@ export function AdminPage({ className, children, }: Props) {
     <>
       <nav>
         {me ? (
-          <AdminSignOutButton />
+          <>
+            <AdminSignOutButton /><br />
+            안녕하세요. {me.userName}님.
+          </>
         ) : (
           <AdminSignInButton />
         )}

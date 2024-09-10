@@ -15,3 +15,4 @@ export { AdminBlock } from './admin/AdminBlock';
 export { AdminSignInButton } from './admin/AdminSignInButton';
 export { AdminSignOutButton } from './admin/AdminSignOutButton';
 export { CreateUserBlock } from './admin.users/CreateUserBlock';
+export { UserList } from './admin.users/UserList';

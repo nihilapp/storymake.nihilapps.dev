@@ -6,9 +6,9 @@ import { object, string } from 'yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useQueryClient } from '@tanstack/react-query';
+import { UserRole } from '@prisma/client';
 import { useCreateUser } from '@/src/hooks';
-import { logsKeys, usersKeys } from '@/src/data/query-keys';
-import { useCreateLog } from '@/src/hooks/query/logs/useCreateLog';
+import { usersKeys } from '@/src/data/query-keys';
 import { usersStore } from '@/src/entities';
 import { configData } from '@/src/data';
 
@@ -19,7 +19,7 @@ interface Props {
 interface Inputs {
   userEmail: string;
   userName: string;
-  userRole: string;
+  userRole: UserRole;
   password: string;
 }
 
@@ -51,7 +51,6 @@ export function CreateUserBlock({ className, }: Props) {
 
   const qc = useQueryClient();
   const createUser = useCreateUser();
-  const createLog = useCreateLog();
 
   const onSubmit: SubmitHandler<Inputs> = useCallback(
     (data) => {
@@ -64,28 +63,11 @@ export function CreateUserBlock({ className, }: Props) {
           },
         });
 
-        createLog.mutate({
-          user: me.userName,
-          uri: `${configData.url}/admin/users`,
-          yn: true,
-          message: '관리자에 의해 사용자가 생성되었습니다.',
-        });
-
         qc.invalidateQueries({
           queryKey: usersKeys.getAll,
         });
-        qc.invalidateQueries({
-          queryKey: logsKeys.getAll,
-        });
       } catch (e) {
         console.log(e);
-
-        createLog.mutate({
-          user: me.userName,
-          uri: `${configData.url}/admin/users`,
-          yn: false,
-          message: '사용자가 정상적으로 생성되지 않았습니다.',
-        });
       }
     },
     [ qc, me, configData, ]
@@ -130,7 +112,7 @@ export function CreateUserBlock({ className, }: Props) {
         )}
         <label htmlFor='password'>
           <span>비밀번호</span>
-          <input type='password' id='password' {...form.register('password')} />
+          <input type='password' id='password' autoComplete='off' {...form.register('password')} />
         </label>
         {form.formState.errors.password && (
           <span>{form.formState.errors.password.message}</span>

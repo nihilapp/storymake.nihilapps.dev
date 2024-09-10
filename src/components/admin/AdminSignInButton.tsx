@@ -21,7 +21,7 @@ export function AdminSignInButton({ className, }: Props) {
         password: process.env.NEXT_PUBLIC_ADMIN_PASSWORD,
       }, {
         onSuccess(res) {
-          setMe(res.data.data);
+          setMe(res.resData);
         },
       });
     },

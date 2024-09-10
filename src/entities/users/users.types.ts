@@ -1,4 +1,6 @@
-import { User, UserRole } from '@prisma/client';
+import {
+  Character, Project, User, UserRole
+} from '@prisma/client';
 
 export interface CreateUserDto {
   userEmail: string;
@@ -16,4 +18,19 @@ export interface UpdateUserDto {
 
 export interface DeleteUserDto {
   user: User;
+}
+
+export interface CustomUser {
+  id: number;
+  uid: string;
+  userEmail: string;
+  userName: string;
+  userRole: UserRole;
+  created: Date;
+  updated: Date;
+  accessToken: string;
+  refreshToken: string;
+  password?: string;
+  Project: Project[];
+  Character: Character[];
 }

@@ -3,7 +3,7 @@
 import React from 'react';
 import { ClassNameValue, twJoin } from 'tailwind-merge';
 import { usersStore } from '@/src/entities';
-import { CreateUserBlock } from '@/src/components';
+import { CreateUserBlock, UserList } from '@/src/components';
 
 interface Props {
   className?: ClassNameValue;
@@ -21,6 +21,7 @@ export function AdminBlock({ className, }: Props) {
 
   return (
     <>
+      <UserList />
       <CreateUserBlock />
     </>
   );

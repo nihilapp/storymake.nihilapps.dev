@@ -17,7 +17,8 @@ export {
 export {
   type CreateUserDto,
   type UpdateUserDto,
-  type DeleteUserDto
+  type DeleteUserDto,
+  type CustomUser
 } from './users/users.types';
 
 export {
