@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { SignInDto, SignOutDto } from '@/src/entities';
+import { SignInDto, SignOutDto, TokenStatus } from '@/src/entities';
 import { Api } from '@/src/utils';
 
 export class AuthQuery {
@@ -21,6 +21,13 @@ export class AuthQuery {
     return Api.postQuery<User, SignInDto>(
       '/admin/auth/signin',
       signInDto
+    );
+  }
+
+  static async tokenCheck(user: User) {
+    return Api.postQuery<TokenStatus, User>(
+      '/auth/token_check',
+      user
     );
   }
 }

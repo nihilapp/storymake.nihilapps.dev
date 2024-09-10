@@ -1,8 +1,8 @@
 import { User } from '@prisma/client';
 import { NextRequest } from 'next/server.js';
-import { AuthTool, DB } from '@/src/utils';
-import { UpdateUserDto } from '@/src/entities';
-import { createResponse } from '@/src/utils/auth';
+import { DB } from '@/src/utils';
+import { DeleteUserDto, UpdateUserDto } from '@/src/entities';
+import { checkAuthRole, createResponse } from '@/src/utils/auth';
 
 interface Params {
   params: {
@@ -28,23 +28,14 @@ export async function GET(_: NextRequest, { params, }: Params) {
 export async function PATCH(req: NextRequest, { params, }: Params) {
   const { user, ...updateUserDto }: UpdateUserDto = await req.json();
 
-  const check = await AuthTool.expChecker(user);
+  const authCheck = await checkAuthRole(
+    user,
+    params
+  );
 
-  if (!check.resData) {
-    return Response.json(createResponse<null>({
-      resData: null,
-      message: '로그인해야 합니다.',
-    }), {
-      status: 401,
-    });
-  }
-
-  if ((check.resData.id !== params.id) && (check.resData.userRole !== 'ADMIN')) {
-    return Response.json(createResponse<null>({
-      resData: null,
-      message: '회원 정보가 일치하지 않습니다.',
-    }), {
-      status: 401,
+  if (authCheck.status !== 200) {
+    return Response.json(authCheck.response, {
+      status: authCheck.status,
     });
   }
 
@@ -63,7 +54,23 @@ export async function PATCH(req: NextRequest, { params, }: Params) {
   });
 }
 
-export async function DELETE(_: NextRequest, { params, }: Params) {
+export async function DELETE(
+  req: NextRequest,
+  { params, }: Params
+) {
+  const { user, }: DeleteUserDto = await req.json();
+
+  const authCheck = await checkAuthRole(
+    user,
+    params
+  );
+
+  if (authCheck.status !== 200) {
+    return Response.json(authCheck.response, {
+      status: authCheck.status,
+    });
+  }
+
   const deleteUser = await DB.users().delete({
     where: {
       id: params.id,

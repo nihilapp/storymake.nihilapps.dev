@@ -1,6 +1,6 @@
 import React from 'react';
 import { setMeta } from '@/src/utils';
-import { AdminBlock, CreateUserBlock } from '@/src/components';
+import { AdminBlock } from '@/src/components';
 
 interface Props {
   //

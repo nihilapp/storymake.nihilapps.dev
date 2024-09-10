@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 import { Api } from '@/src/utils';
-import { CreateUserDto, UpdateUserDto } from '@/src/entities';
+import { CreateUserDto, DeleteUserDto, UpdateUserDto } from '@/src/entities';
 
 export class UsersQuery {
   static async getAll() {
@@ -33,7 +33,10 @@ export class UsersQuery {
     );
   }
 
-  static async delete(id: number) {
-    return Api.deleteQuery<User>(`/users/${id}`);
+  static async delete(id: number, deleteUserDto: DeleteUserDto) {
+    return Api.deletesQuery<User, DeleteUserDto>(
+      `/users/${id}`,
+      deleteUserDto
+    );
   }
 }

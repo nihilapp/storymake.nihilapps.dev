@@ -119,4 +119,12 @@ export class Api {
 
     return data;
   }
+
+  static async deletesQuery<D, P>(url: string, deleteData: P) {
+    const { data, } = await this.delete<D>(url, {
+      data: deleteData,
+    });
+
+    return data;
+  }
 }

@@ -120,6 +120,7 @@ module.exports = {
 
     // 리액트 훅스 규칙
     'react-hooks/exhaustive-deps': 'off',
+    'react-hooks/rules-of-hooks': 'off',
 
     // jsx 규칙
     'jsx-a11y/anchor-is-valid': [

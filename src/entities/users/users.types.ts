@@ -13,3 +13,7 @@ export interface UpdateUserDto {
   userName?: string;
   userRole?: UserRole;
 }
+
+export interface DeleteUserDto {
+  user: User;
+}
