@@ -59,6 +59,8 @@ export async function POST(req: NextRequest) {
     },
   });
 
+  updatedUser.password = null;
+
   return Response.json(createResponse<User>({
     resData: updatedUser,
     message: 'ok',

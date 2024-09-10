@@ -17,6 +17,8 @@ export async function GET(_: NextRequest, { params, }: Params) {
     },
   });
 
+  user.password = null;
+
   return Response.json(createResponse<User>({
     resData: user,
     message: 'ok',
@@ -45,6 +47,8 @@ export async function PATCH(req: NextRequest, { params, }: Params) {
     },
     data: updateUserDto,
   });
+
+  updateUser.password = null;
 
   return Response.json(createResponse<User>({
     resData: updateUser,
@@ -76,6 +80,8 @@ export async function DELETE(
       id: params.id,
     },
   });
+
+  deleteUser.password = null;
 
   return Response.json(createResponse<User>({
     resData: deleteUser,

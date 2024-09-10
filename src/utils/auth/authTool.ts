@@ -98,6 +98,8 @@ export class AuthTool {
         },
       });
 
+      newUser.password = null;
+
       return {
         resData: newUser,
         message: '액세스 토큰이 만료되어 재발급합니다.',

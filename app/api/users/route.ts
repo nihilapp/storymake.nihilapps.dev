@@ -2,28 +2,24 @@ import { User } from '@prisma/client';
 import { NextRequest } from 'next/server';
 import { nihilTool } from '@nihilapp/tools';
 import { DB } from '@/src/utils';
-import { CreateUserDto, CustomUser } from '@/src/entities';
+import { CreateUserDto } from '@/src/entities';
 import { createResponse } from '@/src/utils/auth';
 
 export async function GET() {
   const users = await DB.users().findMany({
-    select: {
-      id: true,
-      uid: true,
-      userEmail: true,
-      userName: true,
-      userRole: true,
-      created: true,
-      updated: true,
-      accessToken: true,
-      refreshToken: true,
+    include: {
       Project: true,
       Character: true,
     },
   });
 
-  return Response.json(createResponse<CustomUser[]>({
-    resData: users,
+  const usersWithoutPassword = users.map((user) => ({
+    ...user,
+    password: null,
+  }));
+
+  return Response.json(createResponse<User[]>({
+    resData: usersWithoutPassword,
     message: 'ok',
   }), {
     status: 200,
