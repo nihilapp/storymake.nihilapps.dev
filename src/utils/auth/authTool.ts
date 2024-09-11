@@ -12,6 +12,8 @@ export class AuthTool {
       },
     });
 
+    console.log(user);
+
     return user.accessToken === savedToken;
   }
 
@@ -97,8 +99,6 @@ export class AuthTool {
           accessToken,
         },
       });
-
-      newUser.password = null;
 
       return {
         resData: newUser,

@@ -1,5 +1,6 @@
 import { User } from '@prisma/client';
 import { NextRequest } from 'next/server.js';
+import { nihilTool } from '@nihilapp/tools';
 import { DB } from '@/src/utils';
 import { DeleteUserDto, UpdateUserDto } from '@/src/entities';
 import { checkAuthRole, createResponse } from '@/src/utils/auth';
@@ -10,14 +11,15 @@ interface Params {
   }
 }
 
-export async function GET(_: NextRequest, { params, }: Params) {
+export async function GET(
+  _: NextRequest,
+  { params, }: Params
+) {
   const user = await DB.users().findFirst({
     where: {
       id: params.id,
     },
   });
-
-  user.password = null;
 
   return Response.json(createResponse<User>({
     resData: user,
@@ -27,8 +29,13 @@ export async function GET(_: NextRequest, { params, }: Params) {
   });
 }
 
-export async function PATCH(req: NextRequest, { params, }: Params) {
-  const { user, ...updateUserDto }: UpdateUserDto = await req.json();
+export async function PATCH(
+  req: NextRequest,
+  { params, }: Params
+) {
+  const {
+    user, password, newPassword, ...updateUserDto
+  }: UpdateUserDto = await req.json();
 
   const authCheck = await checkAuthRole(
     user,
@@ -41,14 +48,43 @@ export async function PATCH(req: NextRequest, { params, }: Params) {
     });
   }
 
+  if (password) {
+    const findAuth = await DB.auth().findFirst({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    const passwordCheck = await nihilTool.bcrypt.dataCompare(
+      findAuth.password,
+      password
+    );
+
+    if (!passwordCheck) {
+      return createResponse<null>({
+        resData: null,
+        message: '현재 비밀번호가 일치하지 않습니다. 다시 확인해주세요.',
+      });
+    }
+
+    const hashedNewPassword = await nihilTool.bcrypt.dataToHash(newPassword);
+
+    await DB.auth().update({
+      where: {
+        userId: user.id,
+      },
+      data: {
+        password: hashedNewPassword,
+      },
+    });
+  }
+
   const updateUser = await DB.users().update({
     where: {
       id: params.id,
     },
     data: updateUserDto,
   });
-
-  updateUser.password = null;
 
   return Response.json(createResponse<User>({
     resData: updateUser,
@@ -81,7 +117,11 @@ export async function DELETE(
     },
   });
 
-  deleteUser.password = null;
+  await DB.auth().delete({
+    where: {
+      userId: deleteUser.id,
+    },
+  });
 
   return Response.json(createResponse<User>({
     resData: deleteUser,

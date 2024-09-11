@@ -13,13 +13,8 @@ export async function GET() {
     },
   });
 
-  const usersWithoutPassword = users.map((user) => ({
-    ...user,
-    password: null,
-  }));
-
   return Response.json(createResponse<User[]>({
-    resData: usersWithoutPassword,
+    resData: users,
     message: 'ok',
   }), {
     status: 200,
@@ -68,11 +63,15 @@ export async function POST(req: NextRequest) {
       userEmail,
       userName,
       userRole,
-      password: hashedPassword,
     },
   });
 
-  newUser.password = null;
+  await DB.auth().create({
+    data: {
+      userId: newUser.id,
+      password: hashedPassword,
+    },
+  });
 
   return Response.json(createResponse<User>({
     resData: newUser,

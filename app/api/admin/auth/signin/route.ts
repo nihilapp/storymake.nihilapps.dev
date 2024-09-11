@@ -32,12 +32,18 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const passwordCompare = nihilTool.bcrypt.dataCompare(
-    findUser.password,
+  const findAuth = await DB.auth().findFirst({
+    where: {
+      userId: findUser.id,
+    },
+  });
+
+  const passwordCheck = await nihilTool.bcrypt.dataCompare(
+    findAuth.password,
     signInDto.password
   );
 
-  if (!passwordCompare) {
+  if (!passwordCheck) {
     return Response.json(createResponse<null>({
       resData: null,
       message: '비밀번호가 일치하지 않습니다.',
@@ -58,8 +64,6 @@ export async function POST(req: NextRequest) {
       refreshToken,
     },
   });
-
-  updatedUser.password = null;
 
   return Response.json(createResponse<User>({
     resData: updatedUser,

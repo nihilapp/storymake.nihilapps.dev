@@ -63,4 +63,8 @@ export class DB {
   static charClasses() {
     return this.client().characterClass;
   }
+
+  static auth() {
+    return this.client().userAuth;
+  }
 }

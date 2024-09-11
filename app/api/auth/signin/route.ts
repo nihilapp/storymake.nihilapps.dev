@@ -23,8 +23,14 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  const findAuth = await DB.auth().findFirst({
+    where: {
+      userId: findUser.id,
+    },
+  });
+
   const passwordCheck = await nihilTool.bcrypt.dataCompare(
-    findUser.password,
+    findAuth.password,
     signInDto.password
   );
 
@@ -49,8 +55,6 @@ export async function POST(req: NextRequest) {
       refreshToken,
     },
   });
-
-  signInUser.password = null;
 
   return Response.json(createResponse<User>({
     resData: signInUser,

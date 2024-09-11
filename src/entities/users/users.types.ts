@@ -14,6 +14,8 @@ export interface UpdateUserDto {
   userEmail?: string;
   userName?: string;
   userRole?: UserRole;
+  password?: string;
+  newPassword?: string;
 }
 
 export interface DeleteUserDto {

@@ -1,0 +1,19 @@
+.header {
+
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.linkBox {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  & > a {
+    &:hover {}
+  }
+}

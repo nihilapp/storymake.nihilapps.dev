@@ -18,7 +18,6 @@ model User {
   uid          String      @unique @default(uuid())
   userEmail    String      @unique
   userName     String      @unique
-  password     String
   userRole     UserRole    @default(USER)
   accessToken  String?
   refreshToken String?
@@ -26,9 +25,20 @@ model User {
   updated      DateTime    @updatedAt
   Project      Project[]
   Character    Character[]
+  UserAuth     UserAuth[]
 
   @@index([userEmail, userName, uid])
   @@map("users")
+}
+
+model UserAuth {
+  id       Int    @id @default(autoincrement())
+  User     User   @relation(fields: [userId], references: [id])
+  userId   Int    @unique
+  password String
+
+  @@index([userId])
+  @@map("user_auth")
 }
 
 enum UserRole {

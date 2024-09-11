@@ -2,15 +2,15 @@
 
 import React, { useCallback } from 'react';
 import { ClassNameValue, twJoin } from 'tailwind-merge';
+import { UserRole } from '@prisma/client';
 import { object, string } from 'yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useQueryClient } from '@tanstack/react-query';
-import { UserRole } from '@prisma/client';
+import { useRouter } from 'next/navigation';
+import { usersStore } from '@/src/entities';
 import { useCreateUser } from '@/src/hooks';
 import { usersKeys } from '@/src/data/query-keys';
-import { usersStore } from '@/src/entities';
-import { configData } from '@/src/data';
 
 interface Props {
   className?: ClassNameValue;
@@ -23,7 +23,7 @@ interface Inputs {
   password: string;
 }
 
-export function CreateUserBlock({ className, }: Props) {
+export function CreateAdminBlock({ className, }: Props) {
   const me = usersStore((state) => state.me);
 
   const formModel = object({
@@ -47,7 +47,7 @@ export function CreateUserBlock({ className, }: Props) {
     defaultValues: {
       userEmail: '',
       userName: '',
-      userRole: '',
+      userRole: 'ADMIN',
       password: '',
     },
   });
@@ -55,25 +55,23 @@ export function CreateUserBlock({ className, }: Props) {
   const qc = useQueryClient();
   const createUser = useCreateUser();
 
-  const onSubmit: SubmitHandler<Inputs> = useCallback(
+  const router = useRouter();
+
+  const onSubmitForm: SubmitHandler<Inputs> = useCallback(
     (data) => {
-      console.log('data >> ', data);
+      console.log(data);
 
-      try {
-        createUser.mutate(data, {
-          async onSuccess(res) {
-            console.log('res >> ', res);
-          },
-        });
+      createUser.mutate(data, {
+        onSuccess() {
+          qc.invalidateQueries({
+            queryKey: usersKeys.getAll,
+          });
 
-        qc.invalidateQueries({
-          queryKey: usersKeys.getAll,
-        });
-      } catch (e) {
-        console.log(e);
-      }
+          router.replace('/admin/users');
+        },
+      });
     },
-    [ qc, me, configData, ]
+    []
   );
 
   const css = {
@@ -85,7 +83,7 @@ export function CreateUserBlock({ className, }: Props) {
 
   return (
     <>
-      <form onSubmit={form.handleSubmit(onSubmit)} className={css.default}>
+      <form onSubmit={form.handleSubmit(onSubmitForm)} className={css.default}>
         <label htmlFor='userEmail'>
           <span>이메일</span>
           <input type='email' id='userEmail' {...form.register('userEmail')} />
@@ -121,7 +119,7 @@ export function CreateUserBlock({ className, }: Props) {
           <span>{form.formState.errors.password.message}</span>
         )}
         <div>
-          <button type='submit'>유저 생성</button>
+          <button type='submit'>관리자 추가</button>
         </div>
       </form>
     </>
